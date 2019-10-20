@@ -39,13 +39,14 @@ const StyledMarketing = styled.main`
       position: relative;
       grid-row: 1;
     }
+    .hero__package-container picture,
     .hero__package-container img {
       display: block;
       position: absolute;
       right: 0;
       transform: translateY(-66%);
-      width: 50vw;
-      min-width: 40rem;
+      width: 100vw;
+      max-width: 60rem;
       filter: drop-shadow(-4rem -1rem 2rem rgba(0, 0, 0, 0.4));
     }
     .hero__input {
@@ -108,6 +109,7 @@ const StyledMarketing = styled.main`
       color: ${colors.ui_500};
     }
     @media (min-width: 40rem) {
+      .hero__package-container picture,
       .hero__package-container img {
         right: -5rem;
       }
@@ -123,8 +125,9 @@ const StyledMarketing = styled.main`
       .hero__package-container {
         grid-row: initial;
       }
+      .hero__package-container picture,
       .hero__package-container img {
-        right: -15rem;
+        right: -7.5rem;
         transform: translateY(-50%);
       }
     }
@@ -167,7 +170,10 @@ export default function Marketing() {
               <p className="hero__disclosure">Deliveries start January 2020</p>
             </Col>
             <Col span={[12, 12, 4]} className="hero__package-container">
-              <img src="/package.png" alt="subscription package" />
+              <picture>
+                <source type="image/webp" srcSet="/package.webp" />
+                <img src="/package.png" alt="subscription package" />
+              </picture>
             </Col>
           </Grid>
         </Container>
