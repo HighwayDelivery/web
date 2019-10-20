@@ -1,3 +1,4 @@
+import Head from "next/head"
 import styled from "styled-components"
 import { Grid, Col } from "lil-grid"
 import colors from "utils/colors"
@@ -138,6 +139,13 @@ const StyledMarketing = styled.main`
 export default function Marketing() {
   return (
     <StyledMarketing>
+      <Head>
+        <title>Cannabis delivered to your door | Highway Delivery</title>
+        <meta
+          name="description"
+          content="Sign up for cannabis delivered to your door on your schedule. Customize your box each delivery and enjoy our exclusive strains and creations along the way."
+        />
+      </Head>
       <section className="hero">
         <Container>
           <Grid className="hero__grid">
