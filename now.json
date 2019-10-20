@@ -1,4 +1,7 @@
 {
   "name": "highway",
-  "alias": ["highway.delivery"]
+  "alias": ["highway.delivery"],
+  "env": {
+    "SERVER_CREDS": "@server-creds"
+  }
 }

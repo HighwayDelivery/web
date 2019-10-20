@@ -1,16 +1,17 @@
+require("dotenv").config()
 const express = require("express")
 const bodyParser = require("body-parser")
 const session = require("express-session")
 const FileStore = require("session-file-store")(session)
 const next = require("next")
 const admin = require("firebase-admin")
-
+const atob = require("atob")
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== "production"
 const app = next({ dev })
 const handler = app.getRequestHandler()
 
-const credentials = require("./credentials/server.json")
+const credentials = JSON.parse(atob(process.env.SERVER_CREDS))
 
 const firebase = admin.initializeApp({
   credential: admin.credential.cert(credentials),
