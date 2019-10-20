@@ -155,7 +155,10 @@ const StyledMarketing = styled.main`
 
 async function getInitialProps(ctx) {
   const { waitListEmail = "" } = cookies(ctx)
-  const db = ctx.req ? ctx.req.firebaseServer.firestore() : firebase.firestore()
+  const db =
+    ctx.req && ctx.req.firebaseServer
+      ? ctx.req.firebaseServer.firestore()
+      : firebase.firestore()
   const ref = db
     .collection("waitlist")
     .where("email", "==", waitListEmail)
