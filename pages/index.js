@@ -156,7 +156,10 @@ export default function Marketing() {
                 Flowers & vapor delivered to your door, on your schedule.
               </p>
               <form className="hero__input">
-                <input type="email" placeholder="name@email.com" />
+                <input type="email" name="waitlist-email" placeholder="name@email.com" />
+                <label htmlFor="waitlist-email" style={{ display: "none" }}>
+                  waitlist email
+                </label>
                 <button type="submit">
                   <span>Join the waitlist.</span>
                 </button>

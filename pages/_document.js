@@ -22,12 +22,13 @@ export default class Document extends NextDocument {
 
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head>
           <link
             href="https://fonts.googleapis.com/css?family=Spectral:200,400,600,800&display=swap"
             rel="stylesheet"
           />
+          <meta name="theme-color" content="#55EFC4" />
         </Head>
         <body>
           <Main />
