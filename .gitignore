@@ -7,5 +7,5 @@ npm-debug.log
 
 sessions
 
-credentials
+credentials/server.json
 .next
