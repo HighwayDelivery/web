@@ -13,10 +13,13 @@ const handler = app.getRequestHandler()
 
 const credentials = JSON.parse(atob(process.env.SERVER_CREDS))
 
-const firebase = admin.initializeApp({
-  credential: admin.credential.cert(credentials),
-  databaseURL: "https://highway-delivery.firebaseio.com"
-})
+const firebase = admin.initializeApp(
+  {
+    credential: admin.credential.cert(credentials),
+    databaseURL: "https://highway-delivery.firebaseio.com"
+  },
+  "server"
+)
 
 app.prepare().then(() => {
   const server = express()
@@ -47,9 +50,8 @@ app.prepare().then(() => {
       .verifyIdToken(token)
       .then(decodedToken => {
         req.session.decodedToken = decodedToken
-        return decodedToken
+        res.json({ status: true, decodedToken })
       })
-      .then(decodedToken => res.json({ status: true, decodedToken }))
       .catch(error => res.json({ error }))
   })
 

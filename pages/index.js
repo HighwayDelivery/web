@@ -1,7 +1,10 @@
+import { useState } from "react"
 import Head from "next/head"
 import styled from "styled-components"
 import { Grid, Col } from "lil-grid"
 import colors from "utils/colors"
+import cookies from "next-cookies"
+import firebase from "firebase-client"
 
 const Container = styled.section`
   max-width: 84rem;
@@ -34,6 +37,7 @@ const StyledMarketing = styled.main`
     .hero__explainer {
       position: relative;
       z-index: 2;
+      margin-right: 4rem;
     }
     .hero__package-container {
       position: relative;
@@ -104,6 +108,16 @@ const StyledMarketing = styled.main`
         }
       }
     }
+    .hero__waitlist {
+      position: relative;
+      z-index: 2;
+      margin-top: 2rem;
+      margin-right: 4rem;
+      h2 {
+        font-weight: 800;
+        color: ${colors.green_500};
+      }
+    }
     .hero__disclosure {
       margin-top: 2rem;
       color: ${colors.ui_500};
@@ -139,7 +153,50 @@ const StyledMarketing = styled.main`
   }
 `
 
-export default function Marketing() {
+async function getInitialProps(ctx) {
+  const { waitListEmail = "" } = cookies(ctx)
+  const db = ctx.req ? ctx.req.firebaseServer.firestore() : firebase.firestore()
+  const ref = db
+    .collection("waitlist")
+    .where("email", "==", waitListEmail)
+    .limit(1)
+  let waitList = null
+  try {
+    const query = await ref.get()
+    if (query.docs[0].exists) waitList = query.docs[0].data()
+  } catch (err) {
+    console.log(err)
+  }
+
+  return { waitList }
+}
+
+export default function Marketing(props) {
+  const [waitList, setWaitList] = useState(props.waitList)
+  const [email, setEmail] = useState("")
+  async function handleSubmit(e) {
+    e.preventDefault()
+    const db = firebase.firestore()
+    const ref = db
+      .collection("waitlist")
+      .where("email", "==", email)
+      .limit(1)
+    try {
+      const query = await ref.get()
+      const doc = query.docs[0]
+      if (doc) setWaitList(doc.data())
+      else {
+        await db.collection("waitlist").add({
+          email,
+          street_address: "2024 N California Ave"
+        })
+        document.cookie = `waitListEmail=${email}; path=/`
+        setWaitList({ email, street_address: "2024 N California Ave" })
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
   return (
     <StyledMarketing>
       <Head>
@@ -158,17 +215,30 @@ export default function Marketing() {
               <p className="hero__explainer">
                 Flowers & vapor delivered to your door, on your schedule.
               </p>
-              <form className="hero__input">
-                <input
-                  aria-label="waitlist email"
-                  type="email"
-                  name="waitlist-email"
-                  placeholder="name@email.com"
-                />
-                <button type="submit">
-                  <span>Join the waitlist.</span>
-                </button>
-              </form>
+              {!waitList ? (
+                <form className="hero__input" onSubmit={handleSubmit}>
+                  <input
+                    aria-label="waitlist email"
+                    type="email"
+                    name="waitlist-email"
+                    placeholder="name@email.com"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                  />
+                  <button type="submit">
+                    <span>Join the waitlist.</span>
+                  </button>
+                </form>
+              ) : (
+                <section className="hero__waitlist">
+                  <h2># 123,912</h2>
+                  <p className="small">
+                    You're on the waitlist. We'll let you know when your invite to sign up
+                    is ready.
+                  </p>
+                  <p>Share highway and move up the list.</p>
+                </section>
+              )}
               <p className="hero__disclosure">Deliveries start January 2020</p>
             </Col>
             <Col span={[12, 12, 4]} className="hero__package-container">
@@ -215,3 +285,5 @@ export default function Marketing() {
     </StyledMarketing>
   )
 }
+
+Marketing.getInitialProps = getInitialProps
