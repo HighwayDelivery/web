@@ -3,7 +3,7 @@ import { Grid, Col } from "lil-grid"
 import colors from "utils/colors"
 
 const Container = styled.section`
-  max-width: 84rem;
+  max-width: 86rem;
   margin-left: auto;
   margin-right: auto;
   padding-left: 2rem;
