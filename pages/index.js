@@ -46,7 +46,7 @@ const StyledMarketing = styled.main`
       transform: translateY(-66%);
       width: 50vw;
       min-width: 40rem;
-      filter: drop-shadow(-4rem 0rem 2rem rgba(0, 0, 0, 0.5));
+      filter: drop-shadow(-4rem -1rem 2rem rgba(0, 0, 0, 0.4));
     }
     .hero__input {
       display: flex;

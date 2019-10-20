@@ -1,0 +1,21 @@
+{
+  "short_name": "Highway",
+  "name": "Highway",
+  "icons": [
+    {
+      "src": "/images/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/account/?source=pwa",
+  "background_color": "#A29BFE",
+  "display": "standalone",
+  "scope": "/account/",
+  "theme_color": "#A29BFE"
+}
