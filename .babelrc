@@ -1,0 +1,16 @@
+{
+  "presets": ["next/babel"],
+  "plugins": [
+    "styled-components",
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "components": "./components",
+          "utils": "./utils",
+          "firebase-client": "./firebase.js"
+        }
+      }
+    ]
+  ]
+}
