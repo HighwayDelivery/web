@@ -23,30 +23,38 @@ const StyledMarketing = styled.main`
     }
     h1 {
       color: ${colors.purple_500};
-      font-size: 10rem;
       font-weight: 800;
       line-height: 1;
       margin-bottom: 2rem;
+      @media (min-width: 40rem) {
+        font-size: 10rem;
+      }
+    }
+    .hero__explainer {
+      position: relative;
+      z-index: 2;
     }
     .hero__package-container {
       position: relative;
-      img {
-        display: block;
-        position: absolute;
-        right: -15rem;
-        transform: translateY(-50%);
-        width: 50vw;
-        min-width: 60rem;
-        filter: drop-shadow(0 4rem 2rem rgba(0, 0, 0, 0.5));
-      }
+      grid-row: 1;
+    }
+    .hero__package-container img {
+      display: block;
+      position: absolute;
+      right: 0;
+      transform: translateY(-66%);
+      width: 50vw;
+      min-width: 40rem;
+      filter: drop-shadow(-4rem 0rem 2rem rgba(0, 0, 0, 0.5));
     }
     .hero__input {
       display: flex;
       margin-top: 2rem;
       border-radius: 4px;
-      background: ${colors.ui_100};
-      margin-right: 4rem;
+      background: ${colors.ui_700};
+      color: ${colors.ui_300};
       padding: 1rem;
+      flex-direction: column;
       input,
       button {
         all: unset;
@@ -56,7 +64,11 @@ const StyledMarketing = styled.main`
         cursor: text;
         margin: 0 1rem;
         flex: 1;
-        color: ${colors.ui_900};
+        color: ${colors.ui_300};
+        margin-bottom: 2rem;
+        &::placeholder {
+          color: ${colors.ui_500};
+        }
       }
       button {
         cursor: pointer;
@@ -66,6 +78,7 @@ const StyledMarketing = styled.main`
         border-radius: 4px;
         overflow: hidden;
         transition: 200ms;
+        text-align: center;
         span {
           position: relative;
           z-index: 2;
@@ -89,15 +102,36 @@ const StyledMarketing = styled.main`
         }
       }
     }
+    .hero__disclosure {
+      margin-top: 2rem;
+      color: ${colors.ui_500};
+    }
+    @media (min-width: 40rem) {
+      .hero__package-container img {
+        right: -5rem;
+      }
+      .hero__input {
+        margin-right: 4rem;
+        flex-direction: row;
+      }
+      .hero__input input {
+        margin-bottom: 0;
+      }
+    }
+    @media (min-width: 60rem) {
+      .hero__package-container {
+        grid-row: initial;
+      }
+      .hero__package-container img {
+        right: -15rem;
+        transform: translateY(-50%);
+      }
+    }
   }
   .pitch-cards {
     margin-top: 10rem;
     margin-bottom: 10rem;
     grid-row-gap: 5rem;
-  }
-  .hero__disclosure {
-    margin-top: 2rem;
-    color: ${colors.ui_500};
   }
 `
 
@@ -107,10 +141,12 @@ export default function Marketing() {
       <section className="hero">
         <Container>
           <Grid className="hero__grid">
-            <Col span={[8]}>
+            <Col span={[12, 12, 8]}>
               <h2>Highway</h2>
               <h1>Get It Your Way</h1>
-              <p>Flowers & vapor delivered to your door, on your schedule.</p>
+              <p className="hero__explainer">
+                Flowers & vapor delivered to your door, on your schedule.
+              </p>
               <form className="hero__input">
                 <input type="email" placeholder="name@email.com" />
                 <button type="submit">
@@ -119,7 +155,7 @@ export default function Marketing() {
               </form>
               <p className="hero__disclosure">Deliveries start January 2020</p>
             </Col>
-            <Col span={[4]} className="hero__package-container">
+            <Col span={[12, 12, 4]} className="hero__package-container">
               <img src="/package.png" alt="subscription package" />
             </Col>
           </Grid>
