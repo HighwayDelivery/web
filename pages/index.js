@@ -19,6 +19,10 @@ const StyledMarketing = styled.main`
     overflow: hidden;
     background: ${colors.ui_900};
     color: ${colors.ui_300};
+    .front {
+      position: relative;
+      z-index: 3;
+    }
     .hero__grid {
       min-height: calc(100vh - 5rem);
       padding-top: 2rem;
@@ -26,7 +30,7 @@ const StyledMarketing = styled.main`
       align-items: center;
     }
     h1 {
-      color: ${colors.purple_500};
+      color: ${colors.purple_300};
       font-weight: 800;
       line-height: 1;
       margin-bottom: 2rem;
@@ -218,7 +222,9 @@ export default function Marketing(props) {
           <Grid className="hero__grid">
             <Col span={[12, 12, 8]}>
               <h2>Highway</h2>
-              <h1>Get It Your Way</h1>
+              <h1>
+                <span className="front">Cannabis</span> Delivered
+              </h1>
               <p className="hero__explainer">
                 Flowers & vapor delivered to your door, on your schedule.
               </p>
