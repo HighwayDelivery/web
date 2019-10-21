@@ -255,8 +255,8 @@ export default function Marketing(props) {
             </Col>
             <Col span={[12, 12, 4]} className="hero__package-container">
               <picture>
-                <source type="image/webp" srcSet="/package.webp" />
-                <img src="/package.png" alt="subscription package" />
+                <source type="image/webp" srcSet="/images/package.webp" />
+                <img alt="subscription package" src="/images/package.png" />
               </picture>
             </Col>
           </Grid>
