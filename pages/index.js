@@ -163,8 +163,10 @@ async function getInitialProps(ctx) {
     .limit(1)
   let waitList = null
   try {
-    const query = await ref.get()
-    if (query.docs[0].exists) waitList = query.docs[0].data()
+    const {
+      docs: [doc]
+    } = await ref.get()
+    if (doc.exists) waitList = doc.data()
   } catch (err) {
     console.log(err)
   }
@@ -178,20 +180,24 @@ export default function Marketing(props) {
   async function handleSubmit(e) {
     e.preventDefault()
     const db = firebase.firestore()
-    const ref = db
-      .collection("waitlist")
-      .where("email", "==", email)
-      .limit(1)
+    const waitlistRef = db.collection("waitlist")
     try {
-      const query = await ref.get()
-      const doc = query.docs[0]
+      const { size: waitlistSize } = await waitlistRef.get()
+      const {
+        docs: [doc]
+      } = await waitlistRef.where("email", "==", email).get()
       if (doc) setWaitList(doc.data())
       else {
         await db.collection("waitlist").add({
           email,
-          street_address: "2024 N California Ave"
+          street_address: "2024 N California Ave",
+          place: waitlistSize
         })
-        setWaitList({ email, street_address: "2024 N California Ave" })
+        setWaitList({
+          email,
+          street_address: "2024 N California Ave",
+          place: waitlistSize
+        })
       }
       document.cookie = `waitListEmail=${email}`
     } catch (err) {
@@ -221,6 +227,7 @@ export default function Marketing(props) {
                   <input
                     aria-label="waitlist email"
                     type="email"
+                    required
                     name="waitlist-email"
                     placeholder="name@email.com"
                     value={email}
@@ -232,7 +239,7 @@ export default function Marketing(props) {
                 </form>
               ) : (
                 <section className="hero__waitlist">
-                  <h2># 123,912</h2>
+                  <h2># {waitList.place}</h2>
                   <p className="small">
                     You're on the waitlist. We'll let you know when your invite to sign up
                     is ready.

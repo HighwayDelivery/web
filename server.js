@@ -20,8 +20,6 @@ const firebase = admin.initializeApp(
   "server"
 )
 
-console.log(firebase)
-
 app.prepare().then(() => {
   const server = express()
 
