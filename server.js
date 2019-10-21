@@ -13,9 +13,12 @@ const handler = app.getRequestHandler()
 
 const credentials = JSON.parse(atob(process.env.SERVER_CREDS))
 
-const firebase = admin.initializeApp({
-  credential: admin.credential.cert(credentials)
-})
+const firebase = admin.initializeApp(
+  {
+    credential: admin.credential.cert(credentials)
+  },
+  "server"
+)
 
 console.log(firebase)
 
