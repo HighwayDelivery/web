@@ -227,7 +227,7 @@ export default function Marketing(props) {
                   <input
                     aria-label="waitlist email"
                     type="email"
-                    required
+                    required={true}
                     name="waitlist-email"
                     placeholder="name@email.com"
                     value={email}
