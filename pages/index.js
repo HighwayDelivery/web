@@ -191,9 +191,9 @@ export default function Marketing(props) {
           email,
           street_address: "2024 N California Ave"
         })
-        document.cookie = `waitListEmail=${email}`
         setWaitList({ email, street_address: "2024 N California Ave" })
       }
+      document.cookie = `waitListEmail=${email}`
     } catch (err) {
       console.log(err)
     }
