@@ -4,9 +4,12 @@ import colors from "utils/colors"
 export default createGlobalStyle`
   * {
     box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   :root {
     font-size: 12px;
+
   }
   html, body {
     padding: 0;

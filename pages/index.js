@@ -38,11 +38,6 @@ const StyledMarketing = styled.main`
         font-size: 10rem;
       }
     }
-    .hero__explainer {
-      position: relative;
-      z-index: 2;
-      margin-right: 4rem;
-    }
     .hero__package-container {
       position: relative;
       grid-row: 1;
@@ -148,6 +143,9 @@ const StyledMarketing = styled.main`
         right: -7.5rem;
         transform: translateY(-50%);
       }
+      .hero__explainer {
+        margin-right: 20rem;
+      }
     }
   }
   .pitch-cards {
@@ -225,7 +223,7 @@ export default function Marketing(props) {
               <h1>
                 <span className="front">Cannabis</span> Delivered
               </h1>
-              <p className="hero__explainer">
+              <p className="hero__explainer front">
                 Flowers & vapor delivered to your door, on your schedule.
               </p>
               {!waitList ? (
@@ -246,7 +244,7 @@ export default function Marketing(props) {
               ) : (
                 <section className="hero__waitlist">
                   <h2># {waitList.place}</h2>
-                  <p className="small">
+                  <p className="small front">
                     You're on the waitlist. We'll let you know when your invite to sign up
                     is ready.
                   </p>
