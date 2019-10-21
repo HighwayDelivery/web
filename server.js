@@ -13,13 +13,11 @@ const handler = app.getRequestHandler()
 
 const credentials = JSON.parse(atob(process.env.SERVER_CREDS))
 
-const firebase = admin.initializeApp(
-  {
-    credential: admin.credential.cert(credentials),
-    databaseURL: "https://highway-delivery.firebaseio.com"
-  },
-  "server"
-)
+const firebase = admin.initializeApp({
+  credential: admin.credential.cert(credentials)
+})
+
+console.log(firebase)
 
 app.prepare().then(() => {
   const server = express()
