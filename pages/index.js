@@ -5,6 +5,8 @@ import { Grid, Col } from "lil-grid"
 import colors from "utils/colors"
 import cookies from "next-cookies"
 import firebase from "firebase-client"
+import { motion } from "framer-motion"
+import { Facebook, Twitter, Instagram, Share2 } from "react-feather"
 
 const Container = styled.section`
   max-width: 84rem;
@@ -153,6 +155,11 @@ const StyledMarketing = styled.main`
     margin-bottom: 10rem;
     grid-row-gap: 5rem;
   }
+  footer {
+    background: ${colors.purple_700};
+    color: ${colors.ui_100};
+    padding: 2rem 0;
+  }
 `
 
 async function getInitialProps(ctx) {
@@ -185,6 +192,7 @@ export default function Marketing(props) {
     const waitlistRef = db.collection("waitlist")
     try {
       const { size: waitlistSize } = await waitlistRef.get()
+      console.log(waitlistSize)
       const {
         docs: [doc]
       } = await waitlistRef.where("email", "==", email).get()
@@ -198,7 +206,7 @@ export default function Marketing(props) {
         setWaitList({
           email,
           street_address: "2024 N California Ave",
-          place: waitlistSize
+          place: waitlistSize + 1
         })
       }
       document.cookie = `waitListEmail=${email}`
@@ -206,33 +214,58 @@ export default function Marketing(props) {
       console.log(err)
     }
   }
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.5
+      }
+    }
+  }
+  const picture = {
+    hidden: { opacity: 0, scale: 1.1, x: 72 },
+    show: { opacity: 1, scale: 1, x: 0 }
+  }
   return (
     <StyledMarketing>
       <Head>
-        <title>Cannabis delivered to your door | Highway Delivery</title>
+        <title>Curated Cannabis | Highway Delivery</title>
         <meta
           name="description"
-          content="Sign up for cannabis delivered to your door on your schedule. Customize your box each delivery and enjoy our exclusive strains and creations along the way."
+          content="Cannabis subscription boxes. Get curated cannabis each month. Customize your box and enjoy our exclusive strains and creations along the way."
         />
+        <meta property="og:url" content="https://highway.delivery" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Curated Cannabis" />
+        <meta
+          property="og:description"
+          content="Cannabis subscription boxes. Get curated cannabis each month. Customize your box and enjoy our exclusive strains and creations along the way."
+        />
+        <meta property="og:image" content="https://highway.delivery/images/package.png" />
       </Head>
       <section className="hero">
-        <Container>
+        <Container
+          as={motion.section}
+          variants={container}
+          initial="hidden"
+          animate="show"
+        >
           <Grid className="hero__grid">
             <Col span={[12, 12, 8]}>
               <h2>Highway</h2>
               <h1>
-                <span className="front">Cannabis</span> Delivered
+                <span className="front">Cannabis,</span> Curated
               </h1>
               <p className="hero__explainer front">
-                Flowers & vapor delivered to your door, on your schedule.
+                Try a curated set of flowers and vapor each month.
               </p>
               {!waitList ? (
                 <form className="hero__input" onSubmit={handleSubmit}>
                   <input
                     aria-label="waitlist email"
                     type="email"
-                    required={true}
-                    name="waitlist-email"
+                    required
                     placeholder="name@email.com"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
@@ -244,20 +277,42 @@ export default function Marketing(props) {
               ) : (
                 <section className="hero__waitlist">
                   <h2># {waitList.place}</h2>
-                  <p className="small front">
+                  <p className="front">
                     You're on the waitlist. We'll let you know when your invite to sign up
                     is ready.
                   </p>
-                  <p>Share highway and move up the list.</p>
+                  <section
+                    css={`
+                      display: flex;
+                      margin: 1rem 0;
+                      a {
+                        margin-right: 2rem;
+                        color: ${colors.green_500};
+                        &:hover {
+                          color: ${colors.green_700};
+                        }
+                      }
+                    `}
+                  >
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://highway.delivery">
+                      <Facebook />
+                    </a>
+                    <a href="https://twitter.com/home?status=https://highway.delivery">
+                      <Twitter />
+                    </a>
+                    <a href="https://www.instagram.com/highway.delivery/">
+                      <Instagram />
+                    </a>
+                  </section>
                 </section>
               )}
               <p className="hero__disclosure">Deliveries start January 2020</p>
             </Col>
             <Col span={[12, 12, 4]} className="hero__package-container">
-              <picture>
+              <motion.picture variants={picture}>
                 <source type="image/webp" srcSet="/images/package.webp" />
                 <img alt="subscription package" src="/images/package.png" />
-              </picture>
+              </motion.picture>
             </Col>
           </Grid>
         </Container>
@@ -294,6 +349,14 @@ export default function Marketing(props) {
           </p>
         </Col>
       </Container>
+      <footer>
+        <Container>
+          <p className="small">
+            Made by <a href="https://dreadful.design">Dreadful Design.</a> All rights
+            reserved. &reg;
+          </p>
+        </Container>
+      </footer>
     </StyledMarketing>
   )
 }
