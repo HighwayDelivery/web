@@ -6,6 +6,7 @@ import colors from "utils/colors"
 import cookies from "next-cookies"
 import firebase from "firebase-client"
 import { motion } from "framer-motion"
+import { Facebook, Twitter, Instagram } from "react-feather"
 
 const Container = styled.section`
   max-width: 84rem;
@@ -154,6 +155,11 @@ const StyledMarketing = styled.main`
     margin-bottom: 10rem;
     grid-row-gap: 5rem;
   }
+  footer {
+    background: ${colors.purple_700};
+    color: ${colors.ui_100};
+    padding: 2rem 0;
+  }
 `
 
 async function getInitialProps(ctx) {
@@ -241,7 +247,7 @@ export default function Marketing(props) {
             <Col span={[12, 12, 8]}>
               <h2>Highway</h2>
               <h1>
-                <span className="front">Cannabis</span> Subscription
+                <span className="front">Cannabis,</span> Curated
               </h1>
               <p className="hero__explainer front">
                 Try a curated set of flowers and vapor each month.
@@ -263,11 +269,33 @@ export default function Marketing(props) {
               ) : (
                 <section className="hero__waitlist">
                   <h2># {waitList.place}</h2>
-                  <p className="small front">
+                  <p className="front">
                     You're on the waitlist. We'll let you know when your invite to sign up
                     is ready.
                   </p>
-                  <p>Share highway and move up the list.</p>
+                  <section
+                    css={`
+                      display: flex;
+                      margin: 1rem 0;
+                      a {
+                        margin-right: 2rem;
+                        color: ${colors.green_500};
+                        &:hover {
+                          color: ${colors.green_700};
+                        }
+                      }
+                    `}
+                  >
+                    <a href="https://www.facebook.com/highway.weed/">
+                      <Facebook />
+                    </a>
+                    <a href="https://twitter.com/DeliveryHighway">
+                      <Twitter />
+                    </a>
+                    <a href="https://www.instagram.com/highway.delivery/">
+                      <Instagram />
+                    </a>
+                  </section>
                 </section>
               )}
               <p className="hero__disclosure">Deliveries start January 2020</p>
@@ -313,6 +341,14 @@ export default function Marketing(props) {
           </p>
         </Col>
       </Container>
+      <footer>
+        <Container>
+          <p className="small">
+            Made by <a href="https://dreadful.design">Dreadful Design.</a> All rights
+            reserved. &reg;
+          </p>
+        </Container>
+      </footer>
     </StyledMarketing>
   )
 }
