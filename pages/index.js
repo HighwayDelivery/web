@@ -5,6 +5,7 @@ import { Grid, Col } from "lil-grid"
 import colors from "utils/colors"
 import cookies from "next-cookies"
 import firebase from "firebase-client"
+import { motion } from "framer-motion"
 
 const Container = styled.section`
   max-width: 84rem;
@@ -185,6 +186,7 @@ export default function Marketing(props) {
     const waitlistRef = db.collection("waitlist")
     try {
       const { size: waitlistSize } = await waitlistRef.get()
+      console.log(waitlistSize)
       const {
         docs: [doc]
       } = await waitlistRef.where("email", "==", email).get()
@@ -198,7 +200,7 @@ export default function Marketing(props) {
         setWaitList({
           email,
           street_address: "2024 N California Ave",
-          place: waitlistSize
+          place: waitlistSize + 1
         })
       }
       document.cookie = `waitListEmail=${email}`
@@ -206,33 +208,50 @@ export default function Marketing(props) {
       console.log(err)
     }
   }
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.5
+      }
+    }
+  }
+  const picture = {
+    hidden: { opacity: 0, scale: 1.1, x: 72 },
+    show: { opacity: 1, scale: 1, x: 0 }
+  }
   return (
     <StyledMarketing>
       <Head>
-        <title>Cannabis delivered to your door | Highway Delivery</title>
+        <title>Curated Cannabis | Highway Delivery</title>
         <meta
           name="description"
-          content="Sign up for cannabis delivered to your door on your schedule. Customize your box each delivery and enjoy our exclusive strains and creations along the way."
+          content="Cannabis subscription boxes. Get curated cannabis each month. Customize your box and enjoy our exclusive strains and creations along the way."
         />
       </Head>
       <section className="hero">
-        <Container>
+        <Container
+          as={motion.section}
+          variants={container}
+          initial="hidden"
+          animate="show"
+        >
           <Grid className="hero__grid">
             <Col span={[12, 12, 8]}>
               <h2>Highway</h2>
               <h1>
-                <span className="front">Cannabis</span> Delivered
+                <span className="front">Cannabis</span> Subscription
               </h1>
               <p className="hero__explainer front">
-                Flowers & vapor delivered to your door, on your schedule.
+                Try a curated set of flowers and vapor each month.
               </p>
               {!waitList ? (
                 <form className="hero__input" onSubmit={handleSubmit}>
                   <input
                     aria-label="waitlist email"
                     type="email"
-                    required={true}
-                    name="waitlist-email"
+                    required
                     placeholder="name@email.com"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
@@ -254,10 +273,10 @@ export default function Marketing(props) {
               <p className="hero__disclosure">Deliveries start January 2020</p>
             </Col>
             <Col span={[12, 12, 4]} className="hero__package-container">
-              <picture>
+              <motion.picture variants={picture}>
                 <source type="image/webp" srcSet="/images/package.webp" />
                 <img alt="subscription package" src="/images/package.png" />
-              </picture>
+              </motion.picture>
             </Col>
           </Grid>
         </Container>
