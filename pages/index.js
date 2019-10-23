@@ -6,7 +6,7 @@ import colors from "utils/colors"
 import cookies from "next-cookies"
 import firebase from "firebase-client"
 import { motion } from "framer-motion"
-import { Facebook, Twitter, Instagram } from "react-feather"
+import { Facebook, Twitter, Instagram, Share2 } from "react-feather"
 
 const Container = styled.section`
   max-width: 84rem;
@@ -235,6 +235,14 @@ export default function Marketing(props) {
           name="description"
           content="Cannabis subscription boxes. Get curated cannabis each month. Customize your box and enjoy our exclusive strains and creations along the way."
         />
+        <meta property="og:url" content="https://highway.delivery" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Curated Cannabis" />
+        <meta
+          property="og:description"
+          content="Cannabis subscription boxes. Get curated cannabis each month. Customize your box and enjoy our exclusive strains and creations along the way."
+        />
+        <meta property="og:image" content="https://highway.delivery/images/package.png" />
       </Head>
       <section className="hero">
         <Container
@@ -286,10 +294,10 @@ export default function Marketing(props) {
                       }
                     `}
                   >
-                    <a href="https://www.facebook.com/highway.weed/">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://highway.delivery">
                       <Facebook />
                     </a>
-                    <a href="https://twitter.com/DeliveryHighway">
+                    <a href="https://twitter.com/home?status=https://highway.delivery">
                       <Twitter />
                     </a>
                     <a href="https://www.instagram.com/highway.delivery/">
