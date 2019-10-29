@@ -42,6 +42,7 @@ app.prepare().then(() => {
   })
 
   server.post("/api/login", (req, res) => {
+    console.log("log in")
     if (!req.body) return res.sendStatus(400)
     const token = req.body.token
     firebase
@@ -55,11 +56,12 @@ app.prepare().then(() => {
   })
 
   server.post("/api/logout", (req, res) => {
+    console.log("log out")
     req.session.decodedToken = null
     res.json({ status: true })
   })
 
-  server.get("*", handler)
+  server.all("*", handler)
 
   server.listen(port, err => {
     if (err) throw err
