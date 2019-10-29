@@ -165,7 +165,7 @@ const StyledMarketing = styled.main`
 async function getInitialProps(ctx) {
   const { waitListEmail } = cookies(ctx)
   if (!waitListEmail) return { waitList: null }
-  const db = ctx.req ? ctx.req.firebaseServer : firebase.firestore()
+  const db = ctx.req ? ctx.req.firebaseServer.firestore() : firebase.firestore()
   const ref = db
     .collection("waitlist")
     .where("email", "==", waitListEmail)
@@ -191,13 +191,12 @@ export default function Marketing(props) {
     const db = firebase.firestore()
     const waitlistRef = db.collection("waitlist")
     try {
-      const { size: waitlistSize } = await waitlistRef.get()
-      console.log(waitlistSize)
       const {
         docs: [doc]
       } = await waitlistRef.where("email", "==", email).get()
       if (doc) setWaitList(doc.data())
       else {
+        const { size: waitlistSize } = await waitlistRef.get()
         await db.collection("waitlist").add({
           email,
           street_address: "2024 N California Ave",
