@@ -3,5 +3,7 @@
   "alias": ["highway.delivery"],
   "env": {
     "SERVER_CREDS": "@server-creds"
-  }
+  },
+  "builds": [{ "src": "server.js", "use": "@now/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "/server.js" }]
 }
