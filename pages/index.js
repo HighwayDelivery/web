@@ -6,7 +6,7 @@ import colors from "utils/colors"
 import cookies from "next-cookies"
 import firebase from "firebase-client"
 import { motion } from "framer-motion"
-import { Facebook, Twitter, Instagram, Share2 } from "react-feather"
+import { Facebook, Twitter, Instagram } from "react-feather"
 
 const Container = styled.section`
   max-width: 84rem;
@@ -165,7 +165,7 @@ const StyledMarketing = styled.main`
 async function getInitialProps(ctx) {
   const { waitListEmail } = cookies(ctx)
   if (!waitListEmail) return { waitList: null }
-  const db = firebase.firestore()
+  const db = ctx.req ? ctx.req.firebaseServer : firebase.firestore()
   const ref = db
     .collection("waitlist")
     .where("email", "==", waitListEmail)
