@@ -41,26 +41,6 @@ app.prepare().then(() => {
     next()
   })
 
-  server.post("/api/login", (req, res) => {
-    console.log("log in")
-    if (!req.body) return res.sendStatus(400)
-    const token = req.body.token
-    firebase
-      .auth()
-      .verifyIdToken(token)
-      .then(decodedToken => {
-        req.session.decodedToken = decodedToken
-        res.json({ status: true, decodedToken })
-      })
-      .catch(error => res.json({ error }))
-  })
-
-  server.post("/api/logout", (req, res) => {
-    console.log("log out")
-    req.session.decodedToken = null
-    res.json({ status: true })
-  })
-
   server.all("*", handler)
 
   server.listen(port, err => {
