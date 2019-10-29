@@ -20,22 +20,24 @@ export default class App extends NextApp {
 
   // state = { user: this.props.user }
 
-  // componentDidMount() {
-  //   firebase.auth().onAuthStateChanged(async user => {
-  //     if (user) {
-  //       this.setState({ user })
-  //       try {
-  //         const token = await user.getIdToken()
-  //         return await axios.post("/api/login", { token })
-  //       } catch (err) {
-  //         console.log(err)
-  //       }
-  //     } else {
-  //       this.setState({ user: null })
-  //       await axios.post("/api/logout")
-  //     }
-  //   })
-  // }
+  async componentDidMount() {
+    const response = await axios.post("/api/logout")
+    console.log(response)
+    // firebase.auth().onAuthStateChanged(async user => {
+    //   if (user) {
+    //     this.setState({ user })
+    //     try {
+    //       const token = await user.getIdToken()
+    //       return await axios.post("/api/login", { token })
+    //     } catch (err) {
+    //       console.log(err)
+    //     }
+    //   } else {
+    //     this.setState({ user: null })
+    //     await axios.post("/api/logout")
+    //   }
+    // })
+  }
 
   render() {
     const { Component, pageProps } = this.props
