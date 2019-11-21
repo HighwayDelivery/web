@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "node server.js",
+    "start:dev": "next",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "next start"
+  },
+  "engines": {
+    "node": "8.15.1"
   },
   "keywords": [],
   "author": "",
