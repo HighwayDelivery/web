@@ -9,7 +9,7 @@
     "start": "next start"
   },
   "engines": {
-    "node": "8.15.1"
+    "node": "8.10.x"
   },
   "keywords": [],
   "author": "",
