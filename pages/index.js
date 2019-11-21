@@ -1,12 +1,12 @@
-import { useState } from "react"
-import Head from "next/head"
-import styled from "styled-components"
-import { Grid, Col } from "lil-grid"
-import colors from "utils/colors"
-import cookies from "next-cookies"
-import firebase from "firebase-client"
-import { motion } from "framer-motion"
-import { Facebook, Twitter, Instagram, Share2 } from "react-feather"
+import { useState } from "react";
+import Head from "next/head";
+import styled from "styled-components";
+import { Grid, Col } from "lil-grid";
+import colors from "utils/colors";
+import cookies from "next-cookies";
+import firebase from "firebase-client";
+import { motion } from "framer-motion";
+import { Facebook, Twitter, Instagram } from "react-feather";
 
 const Container = styled.section`
   max-width: 84rem;
@@ -14,7 +14,7 @@ const Container = styled.section`
   margin-right: auto;
   padding-left: 2rem;
   padding-right: 2rem;
-`
+`;
 
 const StyledMarketing = styled.main`
   .hero {
@@ -159,59 +159,65 @@ const StyledMarketing = styled.main`
     background: ${colors.purple_700};
     color: ${colors.ui_100};
     padding: 2rem 0;
+    font-weight: 900;
+    a {
+      color: ${colors.green_300};
+      text-decoration: none;
+    }
   }
-`
+`;
 
 async function getInitialProps(ctx) {
-  const { waitListEmail } = cookies(ctx)
-  if (!waitListEmail) return { waitList: null }
-  const db = firebase.firestore()
+  const { waitListEmail } = cookies(ctx);
+  if (!waitListEmail) return { waitList: null };
+  const db = ctx.req
+    ? ctx.req.firebaseServer.firestore()
+    : firebase.firestore();
   const ref = db
     .collection("waitlist")
     .where("email", "==", waitListEmail)
-    .limit(1)
-  let waitList = null
+    .limit(1);
+  let waitList = null;
   try {
     const {
       docs: [doc]
-    } = await ref.get()
-    if (doc.exists) waitList = doc.data()
+    } = await ref.get();
+    if (doc.exists) waitList = doc.data();
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 
-  return { waitList }
+  return { waitList };
 }
 
 export default function Marketing(props) {
-  const [waitList, setWaitList] = useState(props.waitList)
-  const [email, setEmail] = useState("")
+  const [waitList, setWaitList] = useState(props.waitList);
+  const [email, setEmail] = useState("");
   async function handleSubmit(e) {
-    e.preventDefault()
-    const db = firebase.firestore()
-    const waitlistRef = db.collection("waitlist")
+    e.preventDefault();
+    const db = firebase.firestore();
+    const waitlistRef = db.collection("waitlist");
     try {
-      const { size: waitlistSize } = await waitlistRef.get()
-      console.log(waitlistSize)
       const {
         docs: [doc]
-      } = await waitlistRef.where("email", "==", email).get()
-      if (doc) setWaitList(doc.data())
+      } = await waitlistRef.where("email", "==", email).get();
+      if (doc) setWaitList(doc.data());
       else {
+        const { size: waitlistSize } = await waitlistRef.get();
         await db.collection("waitlist").add({
           email,
           street_address: "2024 N California Ave",
           place: waitlistSize
-        })
+        });
         setWaitList({
           email,
           street_address: "2024 N California Ave",
           place: waitlistSize + 1
-        })
+        });
       }
-      document.cookie = `waitListEmail=${email}`
+      document.cookie = `waitListEmail=${email}`;
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
   const container = {
@@ -222,11 +228,11 @@ export default function Marketing(props) {
         delayChildren: 0.5
       }
     }
-  }
+  };
   const picture = {
     hidden: { opacity: 0, scale: 1.1, x: 72 },
     show: { opacity: 1, scale: 1, x: 0 }
-  }
+  };
   return (
     <StyledMarketing>
       <Head>
@@ -242,7 +248,10 @@ export default function Marketing(props) {
           property="og:description"
           content="Cannabis subscription boxes. Get curated cannabis each month. Customize your box and enjoy our exclusive strains and creations along the way."
         />
-        <meta property="og:image" content="https://highway.delivery/images/package.png" />
+        <meta
+          property="og:image"
+          content="https://highway.delivery/images/package.png"
+        />
       </Head>
       <section className="hero">
         <Container
@@ -278,8 +287,8 @@ export default function Marketing(props) {
                 <section className="hero__waitlist">
                   <h2># {waitList.place}</h2>
                   <p className="front">
-                    You're on the waitlist. We'll let you know when your invite to sign up
-                    is ready.
+                    You're on the waitlist. We'll let you know when your invite
+                    to sign up is ready.
                   </p>
                   <section
                     css={`
@@ -321,44 +330,44 @@ export default function Marketing(props) {
         <Col span={[12, 5]}>
           <h3>Flowers & Vapor</h3>
           <p className="small">
-            Choose from flowers or vapor and always be able to change your order up to
-            delivery. Switch it up whenever you want.
+            Choose from flowers or vapor and always be able to change your order
+            up to delivery. Switch it up whenever you want.
           </p>
         </Col>
         <Col span={[0, 2]} />
         <Col span={[12, 5]}>
           <h3>Flexible Delivery</h3>
           <p className="small">
-            Choose a time that works for you and we'll deliver it straight into your hands
-            You'll need an illinois license to accept delivery.
+            Choose a time that works for you and we'll deliver it straight into
+            your hands You'll need an illinois license to accept delivery.
           </p>
         </Col>
         <Col span={[12, 5]}>
           <h3>Extras Included</h3>
           <p className="small">
-            Curated goodies from the best chefs and botanists in the city. Choose from
-            your favorites or let us suggest a treat.
+            Curated goodies from the best chefs and botanists in the city.
+            Choose from your favorites or let us suggest a treat.
           </p>
         </Col>
         <Col span={[0, 2]} />
         <Col span={[12, 5]}>
           <h3>15% Off</h3>
           <p className="small">
-            Subscription equal discounts, you'll get an average 15% off products you order
-            through Highway and they'll be delivered to you for free.
+            Subscription equal discounts, you'll get an average 15% off products
+            you order through Highway and they'll be delivered to you for free.
           </p>
         </Col>
       </Container>
       <footer>
         <Container>
           <p className="small">
-            Made by <a href="https://dreadful.design">Dreadful Design.</a> All rights
-            reserved. &reg;
+            Made by <a href="https://dreadful.design">Dreadful Design.</a> All
+            rights reserved. &trade;
           </p>
         </Container>
       </footer>
     </StyledMarketing>
-  )
+  );
 }
 
-Marketing.getInitialProps = getInitialProps
+Marketing.getInitialProps = getInitialProps;
