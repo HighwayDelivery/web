@@ -1,6 +1,6 @@
 {
   "short_name": "Highway",
-  "name": "Highway",
+  "name": "Highway Cannabis Delivery",
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -13,9 +13,9 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/account/?source=pwa",
+  "start_url": "/store/?source=pwa",
   "background_color": "#A29BFE",
   "display": "standalone",
-  "scope": "/account/",
+  "scope": "/store/",
   "theme_color": "#A29BFE"
 }

@@ -1,12 +1,12 @@
-import { useState } from "react";
-import Head from "next/head";
-import styled from "styled-components";
-import { Grid, Col } from "lil-grid";
-import colors from "utils/colors";
-import cookies from "next-cookies";
-import firebase from "firebase-client";
-import { motion } from "framer-motion";
-import { Facebook, Twitter, Instagram } from "react-feather";
+import { useState, useRef } from "react"
+import Head from "next/head"
+import styled from "styled-components"
+import { Grid, Col } from "lil-grid"
+import colors from "utils/colors"
+import firebase from "firebase-client"
+import { motion } from "framer-motion"
+import cookies from "next-cookies"
+import { Facebook, Twitter, Instagram } from "react-feather"
 
 const Container = styled.section`
   max-width: 84rem;
@@ -14,7 +14,7 @@ const Container = styled.section`
   margin-right: auto;
   padding-left: 2rem;
   padding-right: 2rem;
-`;
+`
 
 const StyledMarketing = styled.main`
   .hero {
@@ -165,61 +165,78 @@ const StyledMarketing = styled.main`
       text-decoration: none;
     }
   }
-`;
+`
 
-async function getInitialProps(ctx) {
-  const { waitListEmail } = cookies(ctx);
-  if (!waitListEmail) return { waitList: null };
-  const db = ctx.req
-    ? ctx.req.firebaseServer.firestore()
-    : firebase.firestore();
-  const ref = db
-    .collection("waitlist")
-    .where("email", "==", waitListEmail)
-    .limit(1);
-  let waitList = null;
-  try {
-    const {
-      docs: [doc]
-    } = await ref.get();
-    if (doc.exists) waitList = doc.data();
-  } catch (err) {
-    console.log(err);
-  }
-
-  return { waitList };
-}
-
-export default function Marketing(props) {
-  const [waitList, setWaitList] = useState(props.waitList);
-  const [email, setEmail] = useState("");
+function WaitListForm({ setEntry }) {
+  const [email, setEmail] = useState("")
+  const { current: db } = useRef(firebase.firestore())
   async function handleSubmit(e) {
-    e.preventDefault();
-    const db = firebase.firestore();
-    const waitlistRef = db.collection("waitlist");
-    try {
+    e.preventDefault()
+    const waitListRef = db.collection("waitlist")
+    async function getEntry() {
       const {
-        docs: [doc]
-      } = await waitlistRef.where("email", "==", email).get();
-      if (doc) setWaitList(doc.data());
+        docs: [entryDoc]
+      } = await waitListRef.where("email", "==", email).get()
+      if (entryDoc) return entryDoc.data()
       else {
-        const { size: waitlistSize } = await waitlistRef.get();
-        await db.collection("waitlist").add({
-          email,
-          street_address: "2024 N California Ave",
-          place: waitlistSize
-        });
-        setWaitList({
-          email,
-          street_address: "2024 N California Ave",
-          place: waitlistSize + 1
-        });
+        const { size } = await waitListRef.get()
+        await waitListRef.add({ email, place: size + 1 })
+        return { email, place: size + 1 }
       }
-      document.cookie = `waitListEmail=${email}`;
+    }
+    try {
+      setEntry(getEntry())
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
   }
+  return (
+    <form className="hero__input" onSubmit={handleSubmit}>
+      <input
+        aria-label="email"
+        type="email"
+        required
+        placeholder="name@email.com"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+      />
+      <button type="submit">
+        <span>Join the wait list.</span>
+      </button>
+    </form>
+  )
+}
+
+function Status({ entry }) {
+  return (
+    <section className="status">
+      <h2>{entry.place}</h2>
+      <h3>
+        You're on the wait list. We'll let you know when your invite is ready.
+      </h3>
+    </section>
+  )
+}
+
+async function getInitialProps(ctx) {
+  const { waitListEmail } = cookies(ctx)
+  let waitList = null
+  if (waitListEmail) {
+    try {
+      const db = firebase.firestore()
+      const {
+        docs: [doc]
+      } = await db.collection("waitlist").where("email", "==", waitListEmail)
+      waitList = doc.data()
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  return { waitList }
+}
+
+export default function Marketing({ waitList }) {
+  const [entry, setEntry] = useState(waitList)
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -228,11 +245,11 @@ export default function Marketing(props) {
         delayChildren: 0.5
       }
     }
-  };
+  }
   const picture = {
     hidden: { opacity: 0, scale: 1.1, x: 72 },
     show: { opacity: 1, scale: 1, x: 0 }
-  };
+  }
   return (
     <StyledMarketing>
       <Head>
@@ -269,51 +286,10 @@ export default function Marketing(props) {
               <p className="hero__explainer front">
                 Try a curated set of flowers and vapor each month.
               </p>
-              {!waitList ? (
-                <form className="hero__input" onSubmit={handleSubmit}>
-                  <input
-                    aria-label="waitlist email"
-                    type="email"
-                    required
-                    placeholder="name@email.com"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                  />
-                  <button type="submit">
-                    <span>Join the waitlist.</span>
-                  </button>
-                </form>
+              {!entry ? (
+                <WaitListForm setEntry={setEntry} />
               ) : (
-                <section className="hero__waitlist">
-                  <h2># {waitList.place}</h2>
-                  <p className="front">
-                    You're on the waitlist. We'll let you know when your invite
-                    to sign up is ready.
-                  </p>
-                  <section
-                    css={`
-                      display: flex;
-                      margin: 1rem 0;
-                      a {
-                        margin-right: 2rem;
-                        color: ${colors.green_500};
-                        &:hover {
-                          color: ${colors.green_700};
-                        }
-                      }
-                    `}
-                  >
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://highway.delivery">
-                      <Facebook />
-                    </a>
-                    <a href="https://twitter.com/home?status=https://highway.delivery">
-                      <Twitter />
-                    </a>
-                    <a href="https://www.instagram.com/highway.delivery/">
-                      <Instagram />
-                    </a>
-                  </section>
-                </section>
+                <Status entry={entry} />
               )}
               <p className="hero__disclosure">Deliveries start January 2020</p>
             </Col>
@@ -367,7 +343,7 @@ export default function Marketing(props) {
         </Container>
       </footer>
     </StyledMarketing>
-  );
+  )
 }
 
-Marketing.getInitialProps = getInitialProps;
+Marketing.getInitialProps = getInitialProps
